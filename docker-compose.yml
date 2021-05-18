@@ -1,0 +1,18 @@
+version: '3'
+services:
+  backend:
+    container_name: backend
+    image: wachayathorn/smarthome:latest
+    restart: always
+    ports:
+      - 3030:3000
+    environment:
+      - TYPEORM_TYPE=mysql
+      - TYPEORM_HOST=3.142.219.106
+      - TYPEORM_PORT=43306
+      - TYPEORM_USERNAME=root
+      - TYPEORM_PASSWORD=P@ssw0rd
+      - TYPEORM_DATABASE=Smart-Home
+      - REDIS_SERVER=redis://3.142.219.106:6380
+      - HPPT_PORT=3000
+  

@@ -1,0 +1,1 @@
+export { GetAllUserResponseDto } from './get-all-user.response.dto';
