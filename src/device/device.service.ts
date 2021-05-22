@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { AddDHTRequestDto, AddRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
 import { DeviceDht, RaspberryPi, User } from '../shared/entities';
 import { GetAllRaspberryPiByUserId } from './dto/response';
@@ -7,6 +7,8 @@ import { DHTGetValueResponseDto } from './dto/response/dht-get-value.response.dt
 
 @Injectable()
 export class DeviceService {
+  private logger = new Logger(DeviceService.name);
+
   public async addRaspberryPi(data: AddRaspberryPiRequestDto): Promise<any> {
     try {
       const piData = new RaspberryPi();
@@ -21,6 +23,7 @@ export class DeviceService {
       await piData.save();
       return true;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -47,6 +50,7 @@ export class DeviceService {
       });
       return responseData;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -70,6 +74,7 @@ export class DeviceService {
         });
       }
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -79,6 +84,7 @@ export class DeviceService {
       await RaspberryPi.update({ piId: data.piId }, { status: data.status });
       return true;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -100,6 +106,7 @@ export class DeviceService {
       await dht.save();
       return true;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -109,6 +116,7 @@ export class DeviceService {
       await DeviceDht.update({ dhtId: data.id }, { status: data.status, isOnline: data.isOnline });
       return true;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -118,6 +126,7 @@ export class DeviceService {
       await DeviceDht.update({ dhtId: data.id }, { temperature: data.temperature, moisture: data.moisture });
       return true;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -131,6 +140,7 @@ export class DeviceService {
       const dhtList = await DeviceDht.find({ piId });
       return dhtList;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -166,6 +176,7 @@ export class DeviceService {
       }
       return responseList;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }

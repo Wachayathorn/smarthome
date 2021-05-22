@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { MessageError } from '../shared/message/message.error';
 import { User } from '../shared/entities';
 import { CreateUserRequestDto } from './dto/request';
@@ -6,6 +6,8 @@ import { GetAllUserResponseDto } from './dto/response';
 
 @Injectable()
 export class UserService {
+  private logger = new Logger(UserService.name);
+
   public async createUser(data: CreateUserRequestDto): Promise<User> {
     try {
       const user = new User();
@@ -15,6 +17,7 @@ export class UserService {
       await user.save();
       return user;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -34,6 +37,7 @@ export class UserService {
       })
       return responseDataList;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
@@ -54,6 +58,7 @@ export class UserService {
         piList: user.raspberryPis
       });
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }
