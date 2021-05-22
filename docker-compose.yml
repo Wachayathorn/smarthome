@@ -12,19 +12,22 @@ services:
       - TYPEORM_PORT=43306
       - TYPEORM_USERNAME=root
       - TYPEORM_PASSWORD=P@ssw0rd
-      - TYPEORM_DATABASE=Smart-Home
+      - TYPEORM_DATABASE=SMARTHOME
       - REDIS_SERVER=redis://3.142.219.106:6380
       - HPPT_PORT=3000
+    depends_on: 
+      - mariadb
+      - redis
   # mysql:
-  #   container_name: mysql
-  #   image: mysql:5.7
-  #   command: --default-authentication-plugin=mysql_native_password
+  #   container_name: mariadb
+  #   image: mariadb:10.6.0
   #   restart: always
   #   ports:
   #     - 43306:3306
   #   environment:
-  #     - MYSQL_ROOT_PASSWORD: P@ssw0rd
-  #   redis:
+  #     - MARIADB_ROOT_PASSWORD: P@ssw0rd
+  #     - MARIADB_DATABASE: SMARTHOME
+  # redis:
   #     container_name: redis
   #     image: redis:alpine
   #     restart: always
