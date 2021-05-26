@@ -15,6 +15,8 @@ export class DeviceService {
       piData.name = data.piName;
       piData.status = data.status;
       piData.createTime = new Date();
+      piData.positionX = data.positionX;
+      piData.positionY = data.positionY;
       const user = await User.findOne({ id: data.userId });
       if (!user) {
         throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,7 +47,9 @@ export class DeviceService {
           name: pi.name,
           status: pi.status,
           dhtList: pi.deviceDhts,
-          lightList: pi.deviceLights
+          lightList: pi.deviceLights,
+          positionX: pi.positionX,
+          positionY: pi.positionY
         })
       });
       return responseData;
@@ -70,7 +74,9 @@ export class DeviceService {
           name: pi.name,
           status: pi.status,
           dhtList: pi.deviceDhts,
-          lightList: pi.deviceLights
+          lightList: pi.deviceLights,
+          positionX: pi.positionX,
+          positionY: pi.positionY
         });
       }
     } catch (error) {

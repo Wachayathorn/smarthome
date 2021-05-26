@@ -16,4 +16,14 @@ export class AddRaspberryPiRequestDto {
     @IsNotEmpty()
     @ApiProperty({ example: 1 })
     status: number;
+
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ example: '120.0054154' })
+    positionX: string;
+  
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ example: '12.000' })
+    positionY: string;
 }

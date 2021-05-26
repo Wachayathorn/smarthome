@@ -16,4 +16,10 @@ export class GetAllRaspberryPiByUserId {
 
     @ApiProperty({ example: [DeviceLight] })
     lightList: object[];
+
+    @ApiProperty({ example: '120.0054154' })
+    positionX: string;
+  
+    @ApiProperty({ example: '12.000' })
+    positionY: string;
 }
