@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Logger, Param, Post, Put } from '@nestjs/common';
-import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
+import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPDhtRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallDHTRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
 import { DeviceService } from './device.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetAllRaspberryPiByUserId } from './dto/response';
@@ -74,6 +74,24 @@ export class DeviceController {
   public async addDHT(@Body() data: AddDHTRequestDto): Promise<any> {
     this.logger.verbose('Add DHT');
     const responseMessage = await this.deviceService.addDHT(data);
+    return { responseMessage };
+  }
+
+  @Post('/dht/install')
+  @ApiOperation({ summary: 'Install DHT' })
+  @ApiResponse({ status: 200, description: 'Install DHT success', type: Boolean })
+  public async installDHT(@Body() data: InstallDHTRequestDto): Promise<any> {
+    this.logger.verbose(`Install DHT ID : ${data.dhtId}`);
+    const responseMessage = await this.deviceService.installDHT(data);
+    return { responseMessage };
+  }
+
+  @Post('/dht/confirm-otp')
+  @ApiOperation({ summary: 'Confirm OTP DHT' })
+  @ApiResponse({ status: 200, description: 'Confirm OTP DHT success', type: Boolean })
+  public async confirmOtpDHT(@Body() data: ConfirmOTPDhtRequestDto): Promise<any> {
+    this.logger.verbose(`Confirm OTP DHT ID : ${data.dhtId}`);
+    const responseMessage = await this.deviceService.confirmOtpDHT(data);
     return { responseMessage };
   }
 

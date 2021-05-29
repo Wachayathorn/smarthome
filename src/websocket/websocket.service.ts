@@ -33,4 +33,9 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         this.logger.verbose(`Send OTP Raspberry Pi ID : ${piId}`);
         this.server.emit(WebSocketTopic.SEND_OTP_RASPBERRY_PI + piId, { otp });
     }
+
+    public async sendOtpDHT(dhtId: string, otp: string) {
+        this.logger.verbose(`Send OTP DHT ID : ${dhtId}`);
+        this.server.emit(WebSocketTopic.SEND_OTP_DHT + dhtId, { otp });
+    }
 }

@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
+import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPDhtRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallDHTRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
 import { DeviceDht, RaspberryPi, User } from '../shared/entities';
 import { GetAllRaspberryPiByUserId } from './dto/response';
 import { MessageError } from '../shared/message/message.error';
@@ -145,7 +145,36 @@ export class DeviceService {
       dht.positionX = data.positionX;
       dht.positionY = data.positionY;
       await dht.save();
+      return dht;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async installDHT(data: InstallDHTRequestDto): Promise<any> {
+    try {
+      const haveDHT = await DeviceDht.findOne({ dhtId: data.dhtId });
+      if (!haveDHT) {
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.DHT_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      await DeviceDht.update({ dhtId: data.dhtId }, { otp: data.otp });
+      this.websocketGateway.sendOtpRaspberryPi(data.dhtId, data.otp);
       return true;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async confirmOtpDHT(data: ConfirmOTPDhtRequestDto): Promise<any> {
+    try {
+      const DHTData = await DeviceDht.findOne({ dhtId: data.dhtId });
+      if (DHTData.otp === data.otp) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
       this.logger.error(error);
       throw error;
