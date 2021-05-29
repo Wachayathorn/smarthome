@@ -41,10 +41,16 @@ export class RaspberryPi extends BaseEntity {
   userId: string;
 
   @Column("varchar", { name: "position_x", nullable: true, length: 50 })
+  @ApiProperty({ example: '2' })
   positionX: string | null;
 
   @Column("varchar", { name: "position_y", nullable: true, length: 50 })
+  @ApiProperty({ example: '2' })
   positionY: string | null;
+
+  @Column("varchar", { name: "otp", nullable: true, length: 50 })
+  @ApiProperty({ example: '111000' })
+  otp: string | null;
 
   @OneToMany(() => DeviceLight, (deviceLight) => deviceLight.pi)
   deviceLights: DeviceLight[];

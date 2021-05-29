@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Logger, Param, Post, Put } from '@nestjs/common';
-import { AddDHTRequestDto, AddRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
+import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
 import { DeviceService } from './device.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetAllRaspberryPiByUserId } from './dto/response';
@@ -18,6 +18,24 @@ export class DeviceController {
   public async addRaspberryPi(@Body() data: AddRaspberryPiRequestDto): Promise<any> {
     this.logger.verbose('Add Raspberry Pi');
     const responseMessage = await this.deviceService.addRaspberryPi(data);
+    return { responseMessage };
+  }
+
+  @Post('/pi/install')
+  @ApiOperation({ summary: 'Install Raspberry Pi' })
+  @ApiResponse({ status: 200, description: 'Install Raspberry Pi success', type: Boolean })
+  public async installRaspberryPi(@Body() data: InstallRaspberryPiRequestDto): Promise<any> {
+    this.logger.verbose(`Install Raspberry Pi ID : ${data.piId}`);
+    const responseMessage = await this.deviceService.installRaspberryPi(data);
+    return { responseMessage };
+  }
+
+  @Post('/pi/confirm-otp')
+  @ApiOperation({ summary: 'Confirm OTP Raspberry Pi' })
+  @ApiResponse({ status: 200, description: 'Confirm OTP Raspberry Pi success', type: Boolean })
+  public async confirmOtpRaspberryPi(@Body() data: ConfirmOTPRaspberryPiRequestDto): Promise<any> {
+    this.logger.verbose(`Confirm OTP Raspberry Pi ID : ${data.piId}`);
+    const responseMessage = await this.deviceService.confirmOtpRaspberryPi(data);
     return { responseMessage };
   }
 

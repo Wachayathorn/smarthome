@@ -45,6 +45,9 @@ export class DeviceDht extends BaseEntity {
   @Column("varchar", { name: "position_y", nullable: true, length: 50 })
   positionY: string | null;
 
+  @Column("varchar", { name: "otp", nullable: true, length: 50 })
+  otp: string | null;
+
   @ManyToOne(() => RaspberryPi, (raspberryPi) => raspberryPi.deviceDhts, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",

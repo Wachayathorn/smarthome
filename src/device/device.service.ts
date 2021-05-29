@@ -1,13 +1,19 @@
 import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { AddDHTRequestDto, AddRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
+import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
 import { DeviceDht, RaspberryPi, User } from '../shared/entities';
 import { GetAllRaspberryPiByUserId } from './dto/response';
 import { MessageError } from '../shared/message/message.error';
 import { DHTGetValueResponseDto } from './dto/response/dht-get-value.response.dto';
+import { WebsocketGateway } from '../websocket/websocket.service';
 
 @Injectable()
 export class DeviceService {
   private logger = new Logger(DeviceService.name);
+
+  constructor(
+    private readonly websocketGateway: WebsocketGateway,
+  ) { }
+
 
   public async addRaspberryPi(data: AddRaspberryPiRequestDto): Promise<any> {
     try {
@@ -23,7 +29,36 @@ export class DeviceService {
       }
       piData.userId = data.userId;
       await piData.save();
+      return piData;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async installRaspberryPi(data: InstallRaspberryPiRequestDto): Promise<any> {
+    try {
+      const havePi = await RaspberryPi.findOne({ piId: data.piId });
+      if (!havePi) {
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      await RaspberryPi.update({ piId: data.piId }, { otp: data.otp });
+      this.websocketGateway.sendOtpRaspberryPi(data.piId, data.otp);
       return true;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async confirmOtpRaspberryPi(data: ConfirmOTPRaspberryPiRequestDto): Promise<any> {
+    try {
+      const piData = await RaspberryPi.findOne({ piId: data.piId });
+      if (piData.otp === data.otp) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
       this.logger.error(error);
       throw error;
