@@ -4,6 +4,7 @@ import { DeviceService } from './device.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GetAllRaspberryPiByUserId } from './dto/response';
 import { DHTGetValueResponseDto } from './dto/response/dht-get-value.response.dto';
+import { DeviceDht, RaspberryPi } from '../shared/entities';
 
 @Controller('device')
 export class DeviceController {
@@ -14,7 +15,7 @@ export class DeviceController {
 
   @Post('/pi/add-pi')
   @ApiOperation({ summary: 'Add Raspberry Pi' })
-  @ApiResponse({ status: 200, description: 'Add Raspberry Pi success', type: Boolean })
+  @ApiResponse({ status: 200, description: 'Add Raspberry Pi success', type: RaspberryPi })
   public async addRaspberryPi(@Body() data: AddRaspberryPiRequestDto): Promise<any> {
     this.logger.verbose('Add Raspberry Pi');
     const responseMessage = await this.deviceService.addRaspberryPi(data);
@@ -70,7 +71,7 @@ export class DeviceController {
 
   @Post('/dht/add-dht')
   @ApiOperation({ summary: 'Add DHT' })
-  @ApiResponse({ status: 200, description: 'Add DHT success', type: Boolean })
+  @ApiResponse({ status: 200, description: 'Add DHT success', type: DeviceDht })
   public async addDHT(@Body() data: AddDHTRequestDto): Promise<any> {
     this.logger.verbose('Add DHT');
     const responseMessage = await this.deviceService.addDHT(data);

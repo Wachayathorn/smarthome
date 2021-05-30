@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {
   BaseEntity,
   Column,
@@ -13,39 +14,51 @@ import { RaspberryPi } from "./raspberry-pi";
 @Entity("device_DHT", { schema: "Smart-Home" })
 export class DeviceDht extends BaseEntity {
   @PrimaryGeneratedColumn({ type: "int", name: "dht_id" })
+  @ApiProperty({ example: '1' })
   dhtId: string;
 
   @Column("varchar", { name: "name", length: 255 })
+  @ApiProperty({ example: 'DHT Name' })
   name: string;
 
   @Column("int", { name: "status", nullable: true })
+  @ApiProperty({ example: 1 })
   status: number | null;
 
   @Column("int", { name: "is_online" })
+  @ApiProperty({ example: 1 })
   isOnline: number;
 
   @Column("varchar", { name: "temperature", nullable: true, length: 10 })
+  @ApiProperty({ example: '36.0' })
   temperature: string | null;
 
   @Column("varchar", { name: "moisture", nullable: true, length: 10 })
+  @ApiProperty({ example: '20.0' })
   moisture: string | null;
 
   @Column("datetime", { name: "sw_last_update", nullable: true })
+  @ApiProperty({ example: '2021-05-08 16:03:38' })
   swLastUpdate: Date | null;
 
   @Column("datetime", { name: "hw_last_update", nullable: true })
+  @ApiProperty({ example: '2021-05-08 16:03:38' })
   hwLastUpdate: Date | null;
 
   @Column("int", { name: "pi_id" })
+  @ApiProperty({ example: '36' })
   piId: string;
 
   @Column("varchar", { name: "position_x", nullable: true, length: 50 })
+  @ApiProperty({ example: '1.000' })
   positionX: string | null;
 
   @Column("varchar", { name: "position_y", nullable: true, length: 50 })
+  @ApiProperty({ example: '2.00' })
   positionY: string | null;
 
   @Column("varchar", { name: "otp", nullable: true, length: 50 })
+  @ApiProperty({ example: '000000' })
   otp: string | null;
 
   @ManyToOne(() => RaspberryPi, (raspberryPi) => raspberryPi.deviceDhts, {
