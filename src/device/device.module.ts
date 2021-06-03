@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { AuthMiddleware } from 'src/shared/middleware/auth.middleware';
 import { WebsocketModule } from '../websocket/websocket.module';
 import { DeviceController } from './device.controller';
 import { DeviceService } from './device.service';
@@ -8,4 +9,8 @@ import { DeviceService } from './device.service';
   controllers: [DeviceController],
   providers: [DeviceService],
 })
-export class DeviceModule { }
+export class DeviceModule { 
+  public configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes(DeviceController);
+  }
+}

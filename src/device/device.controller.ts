@@ -10,7 +10,7 @@ import { DeviceDht, RaspberryPi } from '../shared/entities';
 export class DeviceController {
   constructor(private readonly deviceService: DeviceService) { }
 
-  private logger = new Logger(DeviceController.name);
+  private readonly logger = new Logger(DeviceController.name);
   /////////////////////////////////////////////////////////////////////////////////////
 
   @Post('/pi/add-pi')

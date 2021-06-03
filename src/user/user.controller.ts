@@ -7,17 +7,17 @@ import { GetAllUserResponseDto } from './dto/response';
 
 @Controller('user')
 export class UserController {
-  private logger = new Logger(UserController.name);
+  private readonly logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) { }
 
-  @Post('create')
-  @ApiOperation({ summary: 'Create user' })
-  @ApiResponse({ status: 200, description: 'Create user success', type: User })
-  public async createUser(@Body() data: CreateUserRequestDto): Promise<any> {
-    this.logger.verbose('Create user');
-    const responseMessage = await this.userService.createUser(data);
-    return { responseMessage };
-  }
+  // @Post('create')
+  // @ApiOperation({ summary: 'Create user' })
+  // @ApiResponse({ status: 200, description: 'Create user success', type: User })
+  // public async createUser(@Body() data: CreateUserRequestDto): Promise<any> {
+  //   this.logger.verbose('Create user');
+  //   const responseMessage = await this.userService.createUser(data);
+  //   return { responseMessage };
+  // }
 
   @Get('get-all-user')
   @ApiOperation({ summary: 'Get all users list' })

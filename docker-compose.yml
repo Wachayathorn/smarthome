@@ -8,16 +8,19 @@ services:
       - 3030:3000
     environment:
       - TYPEORM_TYPE=mysql
-      - TYPEORM_HOST=3.142.219.106
-      - TYPEORM_PORT=43306
+      - TYPEORM_HOST=35.185.190.1
+      - TYPEORM_PORT=31593
       - TYPEORM_USERNAME=root
       - TYPEORM_PASSWORD=P@ssw0rd
       - TYPEORM_DATABASE=SMARTHOME
-      - REDIS_SERVER=redis://3.142.219.106:6380
+      - REDIS_SERVER=redis://35.185.190.1:30884
       - HPPT_PORT=3000
-    depends_on: 
-      - mariadb
-      - redis
+      - TOKEN_EXPIRE=1d
+      - JWT_SECRET=SMARTHOME
+      - SALT_ROUNDS=9
+    # depends_on: 
+    #   - mariadb
+    #   - redis
   # mysql:
   #   container_name: mariadb
   #   image: mariadb:10.6.0

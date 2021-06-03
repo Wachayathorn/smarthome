@@ -34,6 +34,14 @@ export class User extends BaseEntity {
   @ApiProperty({ example: '2021-05-08 16:03:38' })
   lastAccess: Date | null;
 
+  @Column("varchar", { name: "username", length: 128 })
+  @ApiProperty({ example: 'USERNAME' })
+  username: string;
+
+  @Column("varchar", { name: "password", length: 255 })
+  @ApiProperty({ example: 'PASSWORD' })
+  password: string;
+
   @OneToMany(() => RaspberryPi, (raspberryPi) => raspberryPi.user)
   @ApiProperty({ example: [RaspberryPi] })
   raspberryPis: RaspberryPi[];

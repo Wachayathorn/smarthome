@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import databaseConfig from './shared/database/database.config';
 import { DatabaseModule } from './shared/database';
 import { WebsocketModule } from './websocket/websocket.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { WebsocketModule } from './websocket/websocket.module';
     }),
     DatabaseModule,
     WebsocketModule,
+    AuthModule,
     UserModule,
     DeviceModule],
 })

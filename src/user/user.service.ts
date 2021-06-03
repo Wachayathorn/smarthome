@@ -6,21 +6,7 @@ import { GetAllUserResponseDto } from './dto/response';
 
 @Injectable()
 export class UserService {
-  private logger = new Logger(UserService.name);
-
-  public async createUser(data: CreateUserRequestDto): Promise<User> {
-    try {
-      const user = new User();
-      user.fname = data.fname;
-      user.lname = data.lname;
-      user.createTime = new Date();
-      await user.save();
-      return user;
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
-  }
+  private readonly logger = new Logger(UserService.name);
 
   public async getAllUser(): Promise<GetAllUserResponseDto[]> {
     try {
@@ -49,7 +35,7 @@ export class UserService {
         .where('user.id=:id', { id })
         .getOne();
       if (!user) {
-        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       return Object.assign(new GetAllUserResponseDto(), {
         id: user.id,

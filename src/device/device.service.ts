@@ -8,7 +8,7 @@ import { WebsocketGateway } from '../websocket/websocket.service';
 
 @Injectable()
 export class DeviceService {
-  private logger = new Logger(DeviceService.name);
+  private readonly logger = new Logger(DeviceService.name);
 
   constructor(
     private readonly websocketGateway: WebsocketGateway,
@@ -25,7 +25,7 @@ export class DeviceService {
       piData.positionY = data.positionY;
       const user = await User.findOne({ id: data.userId });
       if (!user) {
-        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       piData.userId = data.userId;
       await piData.save();
@@ -40,7 +40,7 @@ export class DeviceService {
     try {
       const havePi = await RaspberryPi.findOne({ piId: data.piId });
       if (!havePi) {
-        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       await RaspberryPi.update({ piId: data.piId }, { otp: data.otp });
       this.websocketGateway.sendOtpRaspberryPi(data.piId, data.otp);
@@ -69,7 +69,7 @@ export class DeviceService {
     try {
       const user = await User.findOne({ id: userId });
       if (!user) {
-        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const piList = await RaspberryPi.createQueryBuilder('RaspberryPi')
         .leftJoinAndSelect('RaspberryPi.deviceLights', 'DeviceLight')
@@ -134,7 +134,7 @@ export class DeviceService {
     try {
       const piData = await RaspberryPi.findOne({ piId: data.piId });
       if (!piData) {
-        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const dht = new DeviceDht();
       dht.name = data.name;
@@ -156,7 +156,7 @@ export class DeviceService {
     try {
       const haveDHT = await DeviceDht.findOne({ dhtId: data.dhtId });
       if (!haveDHT) {
-        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.DHT_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ error: MessageError.DHT_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       await DeviceDht.update({ dhtId: data.dhtId }, { otp: data.otp });
       this.websocketGateway.sendOtpRaspberryPi(data.dhtId, data.otp);
@@ -205,7 +205,7 @@ export class DeviceService {
     try {
       const piData = await RaspberryPi.findOne({ piId });
       if (!piData) {
-        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const dhtList = await DeviceDht.find({ piId });
       return dhtList;
@@ -219,7 +219,7 @@ export class DeviceService {
     try {
       const user = await User.findOne({ id: userId });
       if (!user) {
-        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const piList = await RaspberryPi.createQueryBuilder('RaspberryPi')
         .leftJoinAndSelect('RaspberryPi.deviceDhts', 'DeviceDht')
