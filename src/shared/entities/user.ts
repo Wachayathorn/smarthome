@@ -11,7 +11,6 @@ import { RaspberryPi } from "./raspberry-pi";
 @Entity("User", { schema: "Smart-Home" })
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn({ type: "int", name: "ID" })
-  @ApiProperty({ example: '1' })
   id: string;
 
   @Column("varchar", { name: "fname", nullable: true, length: 255 })
@@ -43,6 +42,6 @@ export class User extends BaseEntity {
   password: string;
 
   @OneToMany(() => RaspberryPi, (raspberryPi) => raspberryPi.user)
-  @ApiProperty({ example: [RaspberryPi] })
+  @ApiProperty({ example: [RaspberryPi.prototype] })
   raspberryPis: RaspberryPi[];
 }

@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Logger, Param, Post, Put } from '@nestjs/common';
 import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPDhtRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallDHTRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
 import { DeviceService } from './device.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetAllRaspberryPiByUserId } from './dto/response';
 import { DHTGetValueResponseDto } from './dto/response/dht-get-value.response.dto';
 import { DeviceDht, RaspberryPi } from '../shared/entities';
-
+@ApiTags('Device')
 @Controller('device')
 export class DeviceController {
   constructor(private readonly deviceService: DeviceService) { }

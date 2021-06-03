@@ -11,6 +11,6 @@ export class GetAllUserResponseDto {
   @ApiProperty({ example: 'Lastname' })
   lname: string;
 
-  @ApiProperty({ example: [RaspberryPi] })
+  @ApiProperty({ example: [RaspberryPi.prototype] })
   piList: object[]
 }

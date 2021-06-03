@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserRequestDto } from './dto/request';
 import { UserService } from './user.service';
 import { User } from '../shared/entities';
 import { GetAllUserResponseDto } from './dto/response';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   private readonly logger = new Logger(UserController.name);

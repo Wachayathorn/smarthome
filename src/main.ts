@@ -12,10 +12,9 @@ async function bootstrap() {
   });
 
   const options = new DocumentBuilder()
-    .setTitle('Smart home backend service')
+    .setTitle('SMARTHOME-CHBAN API Document')
     .setDescription('The Smart Home Backend API Description')
     .setVersion('1.0')
-    .addTag('Backend')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   fs.writeFile('swagger.json', JSON.stringify(document), (err) => {

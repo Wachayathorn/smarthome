@@ -11,10 +11,10 @@ export class GetAllRaspberryPiByUserId {
     @ApiProperty({ example: 1 })
     status: number;
 
-    @ApiProperty({ example: [DeviceDht] })
+    @ApiProperty({ example: [DeviceDht.prototype] })
     dhtList: object[];
 
-    @ApiProperty({ example: [DeviceLight] })
+    @ApiProperty({ example: [DeviceLight.prototype] })
     lightList: object[];
 
     @ApiProperty({ example: '120.0054154' })

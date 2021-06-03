@@ -53,11 +53,11 @@ export class RaspberryPi extends BaseEntity {
   otp: string | null;
 
   @OneToMany(() => DeviceLight, (deviceLight) => deviceLight.pi)
-  @ApiProperty({ example: [DeviceLight] })
+  @ApiProperty({ example: [DeviceLight.prototype] })
   deviceLights: DeviceLight[];
 
   @OneToMany(() => DeviceDht, (deviceDht) => deviceDht.pi)
-  @ApiProperty({ example: [DeviceDht] })
+  @ApiProperty({ example: [DeviceDht.prototype] })
   deviceDhts: DeviceDht[];
 
   @ManyToOne(() => User, (user) => user.raspberryPis, {
