@@ -5,7 +5,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetAllRaspberryPiByUserId } from './dto/response';
 import { DHTGetValueResponseDto } from './dto/response/dht-get-value.response.dto';
 import { DeviceDht, RaspberryPi } from '../shared/entities';
-@ApiTags('Device')
 @Controller('device')
 export class DeviceController {
   constructor(private readonly deviceService: DeviceService) { }
@@ -13,6 +12,7 @@ export class DeviceController {
   private readonly logger = new Logger(DeviceController.name);
   /////////////////////////////////////////////////////////////////////////////////////
 
+  @ApiTags('Web Application - Device')
   @Post('/pi/add-pi')
   @ApiOperation({ summary: 'Add Raspberry Pi' })
   @ApiResponse({ status: 200, description: 'Add Raspberry Pi success', type: RaspberryPi })
@@ -22,6 +22,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Hardware - Device')
   @Post('/pi/install')
   @ApiOperation({ summary: 'Install Raspberry Pi' })
   @ApiResponse({ status: 200, description: 'Install Raspberry Pi success', type: Boolean })
@@ -31,6 +32,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Web Application - Device')
   @Post('/pi/confirm-otp')
   @ApiOperation({ summary: 'Confirm OTP Raspberry Pi' })
   @ApiResponse({ status: 200, description: 'Confirm OTP Raspberry Pi success', type: Boolean })
@@ -40,6 +42,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Web Application - Device')
   @Get('/pi/get-pi-by-user-id/:userId')
   @ApiOperation({ summary: 'Get Raspberry Pi by user ID' })
   @ApiResponse({ status: 200, description: 'Get Raspberry Pi by user ID success', type: GetAllRaspberryPiByUserId })
@@ -49,6 +52,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Web Application - Device')
   @Get('/pi/get-pi-by-id/:piId')
   @ApiOperation({ summary: 'Get Raspberry Pi by ID' })
   @ApiResponse({ status: 200, description: 'Get Raspberry Pi by ID success', type: GetAllRaspberryPiByUserId })
@@ -58,6 +62,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Web Application & Hardware - Device')
   @Put('/pi/update-status')
   @ApiOperation({ summary: 'Update Raspberry Pi status' })
   @ApiResponse({ status: 200, description: 'Update Raspberry Pi status success', type: Boolean })
@@ -69,6 +74,7 @@ export class DeviceController {
 
   /////////////////////////////////////////////////////////////////////////////////////
 
+  @ApiTags('Web Application - Device')
   @Post('/dht/add-dht')
   @ApiOperation({ summary: 'Add DHT' })
   @ApiResponse({ status: 200, description: 'Add DHT success', type: DeviceDht })
@@ -78,6 +84,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Hardware - Device')
   @Post('/dht/install')
   @ApiOperation({ summary: 'Install DHT' })
   @ApiResponse({ status: 200, description: 'Install DHT success', type: Boolean })
@@ -87,6 +94,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Web Application - Device')
   @Post('/dht/confirm-otp')
   @ApiOperation({ summary: 'Confirm OTP DHT' })
   @ApiResponse({ status: 200, description: 'Confirm OTP DHT success', type: Boolean })
@@ -96,6 +104,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Web Application - Device')
   @Get('/dht/get-all-by-pi-id/:piId')
   @ApiOperation({ summary: 'Get all DHT by Raspberry Pi ID' })
   @ApiResponse({ status: 200, description: 'Get all DHT by Raspberry Pi ID success', type: [DHTGetValueResponseDto] })
@@ -105,6 +114,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Web Application - Device')
   @Get('/dht/get-all-by-user-id/:userId')
   @ApiOperation({ summary: 'Get all DHT by user ID' })
   @ApiResponse({ status: 200, description: 'Get all DHT by user ID success', type: [DHTGetValueResponseDto] })
@@ -114,6 +124,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Web Application & Hardware - Device')
   @Put('/dht/update-status')
   @ApiOperation({ summary: 'Update DHT status' })
   @ApiResponse({ status: 200, description: 'Update DHT status success', type: Boolean })
@@ -123,6 +134,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
+  @ApiTags('Hardware - Device')
   @Put('/dht/update-value')
   @ApiOperation({ summary: 'Update DHT value' })
   @ApiResponse({ status: 200, description: 'Update DHT value success', type: Boolean })

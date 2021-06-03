@@ -5,7 +5,7 @@ import { AuthService } from "./auth.service";
 import { SignInRequestDto, SignUpRequestDto } from "./dto/request";
 import { SignInResponseDto } from "./dto/response";
 
-@ApiTags('Auth')
+@ApiTags('Web Application - Authentication')
 @Controller('auth')
 export class AuthController {
     private readonly logger = new Logger(AuthController.name);

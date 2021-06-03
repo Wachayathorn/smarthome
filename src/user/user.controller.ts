@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 import { User } from '../shared/entities';
 import { GetAllUserResponseDto } from './dto/response';
 
-@ApiTags('User')
+@ApiTags('Web Application - User')
 @Controller('user')
 export class UserController {
   private readonly logger = new Logger(UserController.name);
