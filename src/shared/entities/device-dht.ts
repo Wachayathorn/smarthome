@@ -13,7 +13,7 @@ import { RaspberryPi } from "./raspberry-pi";
 @Index("FK__Raspberry_Pi", ["piId"], {})
 @Entity("device_DHT", { schema: "Smart-Home" })
 export class DeviceDht extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: "int", name: "dht_id" })
+  @PrimaryGeneratedColumn({ type: "bigint", name: "dht_id" })
   @ApiProperty({ example: '1' })
   dhtId: string;
 
@@ -45,7 +45,7 @@ export class DeviceDht extends BaseEntity {
   @ApiProperty({ example: '2021-05-08 16:03:38' })
   hwLastUpdate: Date | null;
 
-  @Column("int", { name: "pi_id" })
+  @Column("bigint", { name: "pi_id" })
   @ApiProperty({ example: '36' })
   piId: string;
 

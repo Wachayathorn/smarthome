@@ -16,7 +16,7 @@ import { ApiProperty } from "@nestjs/swagger";
 @Index("FK_Raspberry_Pi_User", ["userId"], {})
 @Entity("Raspberry_Pi", { schema: "Smart-Home" })
 export class RaspberryPi extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: "int", name: "Pi_ID" })
+  @PrimaryGeneratedColumn({ type: "bigint", name: "Pi_ID" })
   @ApiProperty({ example: '1' })
   piId: string;
 
@@ -36,7 +36,7 @@ export class RaspberryPi extends BaseEntity {
   @ApiProperty({ example: '2021-05-08 16:03:38' })
   updateTime: Date | null;
 
-  @Column("int", { name: "user_id" })
+  @Column("bigint", { name: "user_id" })
   @ApiProperty({ example: '2' })
   userId: string;
 

@@ -10,7 +10,7 @@ import { RaspberryPi } from "./raspberry-pi";
 
 @Entity("User", { schema: "Smart-Home" })
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: "int", name: "ID" })
+  @PrimaryGeneratedColumn({ type: "bigint", name: "ID" })
   id: string;
 
   @Column("varchar", { name: "fname", nullable: true, length: 255 })

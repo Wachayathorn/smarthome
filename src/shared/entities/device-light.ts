@@ -11,10 +11,10 @@ import { RaspberryPi } from "./raspberry-pi";
 @Index("FK_device_Light_Raspberry_Pi", ["piId"], {})
 @Entity("device_Light", { schema: "Smart-Home" })
 export class DeviceLight extends BaseEntity {
-  @Column("int", { primary: true, name: "light_id" })
+  @Column("bigint", { primary: true, name: "light_id" })
   lightId: string;
 
-  @Column("int", { name: "pi_id" })
+  @Column("bigint", { name: "pi_id" })
   piId: string;
 
   @Column("varchar", { name: "name", length: 255 })
