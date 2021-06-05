@@ -52,6 +52,10 @@ export class RaspberryPi extends BaseEntity {
   @ApiProperty({ example: '111000' })
   otp: string | null;
 
+  @Column("int", { name: "activated" })
+  @ApiProperty({ example: 1 })
+  activated: number;
+
   @OneToMany(() => DeviceLight, (deviceLight) => deviceLight.pi)
   @ApiProperty({ example: [DeviceLight.prototype] })
   deviceLights: DeviceLight[];

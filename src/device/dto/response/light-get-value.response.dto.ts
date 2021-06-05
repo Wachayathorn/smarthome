@@ -24,4 +24,7 @@ export class LightGetValueResponseDto {
 
   @ApiProperty({ example: '123' })
   positionY: string;
+
+  @ApiProperty({ example: 1 })
+  activated: number;
 }

@@ -22,4 +22,7 @@ export class GetAllRaspberryPiByUserId {
   
     @ApiProperty({ example: '12.000' })
     positionY: string;
+
+    @ApiProperty({ example: 1 })
+    activated: number;
 }

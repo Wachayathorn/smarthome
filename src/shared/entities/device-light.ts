@@ -57,6 +57,10 @@ export class DeviceLight extends BaseEntity {
   @ApiProperty({ example: '000000' })
   otp: string | null;
 
+  @Column("int", { name: "activated" })
+  @ApiProperty({ example: 1 })
+  activated: number;
+
   @ManyToOne(() => RaspberryPi, (raspberryPi) => raspberryPi.deviceLights, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",

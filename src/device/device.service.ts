@@ -23,6 +23,7 @@ export class DeviceService {
       piData.createTime = new Date();
       piData.positionX = data.positionX;
       piData.positionY = data.positionY;
+      piData.activated = 0;
       const user = await User.findOne({ id: data.userId });
       if (!user) {
         throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -55,6 +56,8 @@ export class DeviceService {
     try {
       const piData = await RaspberryPi.findOne({ piId: data.piId });
       if (piData.otp === data.otp) {
+        piData.activated = 1;
+        await piData.save();
         return true;
       } else {
         return false;
@@ -84,7 +87,8 @@ export class DeviceService {
           dhtList: pi.deviceDhts,
           lightList: pi.deviceLights,
           positionX: pi.positionX,
-          positionY: pi.positionY
+          positionY: pi.positionY,
+          activated: pi.activated
         })
       });
       return responseData;
@@ -111,7 +115,8 @@ export class DeviceService {
           dhtList: pi.deviceDhts,
           lightList: pi.deviceLights,
           positionX: pi.positionX,
-          positionY: pi.positionY
+          positionY: pi.positionY,
+          activated: pi.activated
         });
       }
     } catch (error) {
@@ -144,6 +149,7 @@ export class DeviceService {
       dht.piId = piData.piId;
       dht.positionX = data.positionX;
       dht.positionY = data.positionY;
+      dht.activated = 0;
       await dht.save();
       return dht;
     } catch (error) {
@@ -171,6 +177,8 @@ export class DeviceService {
     try {
       const DHTData = await DeviceDht.findOne({ dhtId: data.dhtId });
       if (DHTData.otp === data.otp) {
+        DHTData.activated = 1;
+        await DHTData.save();
         return true;
       } else {
         return false;
@@ -218,7 +226,8 @@ export class DeviceService {
           temperature: dhtData.temperature,
           moisture: dhtData.moisture,
           positionX: dhtData.positionX,
-          positionY: dhtData.positionY
+          positionY: dhtData.positionY,
+          activated: dhtData.activated
         })
       });
     } catch (error) {
@@ -250,7 +259,8 @@ export class DeviceService {
               temperature: dhtData.temperature,
               moisture: dhtData.moisture,
               positionX: dhtData.positionX,
-              positionY: dhtData.positionY
+              positionY: dhtData.positionY,
+              activated: dhtData.activated
             });
             responseList.push(model);
           }
@@ -278,6 +288,7 @@ export class DeviceService {
       light.piId = piData.piId;
       light.positionX = data.positionX;
       light.positionY = data.positionY;
+      light.activated = 0;
       await light.save();
       return light;
     } catch (error) {
@@ -305,6 +316,8 @@ export class DeviceService {
     try {
       const lightData = await DeviceLight.findOne({ lightId: data.lightId });
       if (lightData.otp === data.otp) {
+        lightData.activated = 1;
+        await lightData.save();
         return true;
       } else {
         return false;
@@ -351,7 +364,8 @@ export class DeviceService {
           switchStatus: light.switchStatus,
           isOnline: light.isOnline,
           positionX: light.positionX,
-          positionY: light.positionY
+          positionY: light.positionY,
+          activated: light.activated
         })
       });
     } catch (error) {
@@ -382,7 +396,8 @@ export class DeviceService {
               switchStatus: light.switchStatus,
               isOnline: light.isOnline,
               positionX: light.positionX,
-              positionY: light.positionY
+              positionY: light.positionY,
+              activated: light.activated
             });
             responseList.push(model);
           }
