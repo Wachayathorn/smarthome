@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Logger, Param, Post, Put } from '@nestjs/common';
-import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPDhtRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallDHTRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
+import { AddDHTRequestDto, AddLightRequestDto, AddRaspberryPiRequestDto, ConfirmOTPDhtRequestDto, ConfirmOTPLightRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallDHTRequestDto, InstallLightRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateLightStatusRequestDto, UpdateLightValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
 import { DeviceService } from './device.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GetAllRaspberryPiByUserId } from './dto/response';
+import { GetAllRaspberryPiByUserId, LightGetValueResponseDto } from './dto/response';
 import { DHTGetValueResponseDto } from './dto/response/dht-get-value.response.dto';
-import { DeviceDht, RaspberryPi } from '../shared/entities';
+import { DeviceDht, DeviceLight, RaspberryPi } from '../shared/entities';
 @Controller('device')
 export class DeviceController {
   constructor(private readonly deviceService: DeviceService) { }
@@ -145,4 +145,74 @@ export class DeviceController {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////
+
+  @ApiTags('Web Application - Device')
+  @Post('/light/add-light')
+  @ApiOperation({ summary: 'Add light' })
+  @ApiResponse({ status: 200, description: 'Add light success', type: DeviceLight })
+  public async addLight(@Body() data: AddLightRequestDto): Promise<any> {
+    this.logger.verbose('Add light');
+    const responseMessage = await this.deviceService.addLight(data);
+    return { responseMessage };
+  }
+
+  @ApiTags('Hardware - Device')
+  @Post('/light/install')
+  @ApiOperation({ summary: 'Install light' })
+  @ApiResponse({ status: 200, description: 'Install light success', type: Boolean })
+  public async installLight(@Body() data: InstallLightRequestDto): Promise<any> {
+    this.logger.verbose(`Install light ID : ${data.lightId}`);
+    const responseMessage = await this.deviceService.installLight(data);
+    return { responseMessage };
+  }
+
+  @ApiTags('Web Application - Device')
+  @Post('/light/confirm-otp')
+  @ApiOperation({ summary: 'Confirm OTP light' })
+  @ApiResponse({ status: 200, description: 'Confirm OTP light success', type: Boolean })
+  public async confirmOtpLight(@Body() data: ConfirmOTPLightRequestDto): Promise<any> {
+    this.logger.verbose(`Confirm OTP light ID : ${data.lightId}`);
+    const responseMessage = await this.deviceService.confirmOtpLight(data);
+    return { responseMessage };
+  }
+
+  @ApiTags('Web Application & Hardware - Device')
+  @Put('/light/update-status')
+  @ApiOperation({ summary: 'Update light status' })
+  @ApiResponse({ status: 200, description: 'Update light status success', type: Boolean })
+  public async updateLightStatus(@Body() data: UpdateLightStatusRequestDto): Promise<any> {
+    this.logger.verbose('Update light status');
+    const responseMessage = await this.deviceService.updateLightStatus(data);
+    return { responseMessage };
+  }
+
+  @ApiTags('Hardware - Device')
+  @Put('/light/update-switch-status')
+  @ApiOperation({ summary: 'Update light switch' })
+  @ApiResponse({ status: 200, description: 'Update light switch success', type: Boolean })
+  public async updateLightSwitchStatus(@Body() data: UpdateLightValueRequestDto): Promise<any> {
+    this.logger.verbose('Update light switch status');
+    const responseMessage = await this.deviceService.updateLightSwitchStatus(data);
+    return { responseMessage };
+  }
+
+  @ApiTags('Web Application - Device')
+  @Get('/light/get-all-by-pi-id/:piId')
+  @ApiOperation({ summary: 'Get all light by Raspberry Pi ID' })
+  @ApiResponse({ status: 200, description: 'Get all light by Raspberry Pi ID success', type: [LightGetValueResponseDto] })
+  public async getLightByPiId(@Param('piId') piId: string): Promise<any> {
+    this.logger.verbose('Get all light by Raspberry Pi ID');
+    const responseMessage = await this.deviceService.getLightByPiId(piId);
+    return { responseMessage };
+  }
+
+  @ApiTags('Web Application - Device')
+  @Get('/light/get-all-by-user-id/:userId')
+  @ApiOperation({ summary: 'Get all light by user ID' })
+  @ApiResponse({ status: 200, description: 'Get all light by user ID success', type: [LightGetValueResponseDto] })
+  public async getLightByUserId(@Param('userId') userId: string): Promise<any> {
+    this.logger.verbose('Get all light by user ID');
+    const responseMessage = await this.deviceService.getLightByUserId(userId);
+    return { responseMessage };
+  }
 }

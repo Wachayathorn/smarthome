@@ -7,10 +7,10 @@ export class InstallDHTRequestDto {
     @ApiProperty({ example: '1' })
     dhtId: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty({ example: 'Test DHT' })
-    name: string;
+    // @IsString()
+    // @IsNotEmpty()
+    // @ApiProperty({ example: 'Test DHT' })
+    // name: string;
 
     @IsString()
     @IsNotEmpty()

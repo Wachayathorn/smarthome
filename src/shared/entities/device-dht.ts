@@ -21,7 +21,7 @@ export class DeviceDht extends BaseEntity {
   @ApiProperty({ example: 'DHT Name' })
   name: string;
 
-  @Column("int", { name: "status", nullable: true })
+  @Column("int", { name: "status"})
   @ApiProperty({ example: 1 })
   status: number | null;
 

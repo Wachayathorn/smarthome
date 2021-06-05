@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { AddDHTRequestDto, AddRaspberryPiRequestDto, ConfirmOTPDhtRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallDHTRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
-import { DeviceDht, RaspberryPi, User } from '../shared/entities';
-import { GetAllRaspberryPiByUserId } from './dto/response';
+import { AddDHTRequestDto, AddLightRequestDto, AddRaspberryPiRequestDto, ConfirmOTPDhtRequestDto, ConfirmOTPLightRequestDto, ConfirmOTPRaspberryPiRequestDto, InstallDHTRequestDto, InstallLightRequestDto, InstallRaspberryPiRequestDto, UpdateDHTStatusRequestDto, UpdateDHTValueRequestDto, UpdateLightStatusRequestDto, UpdateLightValueRequestDto, UpdateRaspberryPiStatusRequestDto } from './dto/request';
+import { DeviceDht, DeviceLight, RaspberryPi, User } from '../shared/entities';
+import { GetAllRaspberryPiByUserId, LightGetValueResponseDto } from './dto/response';
 import { MessageError } from '../shared/message/message.error';
 import { DHTGetValueResponseDto } from './dto/response/dht-get-value.response.dto';
 import { WebsocketGateway } from '../websocket/websocket.service';
@@ -25,7 +25,7 @@ export class DeviceService {
       piData.positionY = data.positionY;
       const user = await User.findOne({ id: data.userId });
       if (!user) {
-        throw new HttpException({ error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       piData.userId = data.userId;
       await piData.save();
@@ -40,9 +40,9 @@ export class DeviceService {
     try {
       const havePi = await RaspberryPi.findOne({ piId: data.piId });
       if (!havePi) {
-        throw new HttpException({ error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
-      await RaspberryPi.update({ piId: data.piId }, { otp: data.otp });
+      await RaspberryPi.update({ piId: data.piId }, { otp: data.otp, updateTime: new Date() });
       this.websocketGateway.sendOtpRaspberryPi(data.piId, data.otp);
       return true;
     } catch (error) {
@@ -69,7 +69,7 @@ export class DeviceService {
     try {
       const user = await User.findOne({ id: userId });
       if (!user) {
-        throw new HttpException({ error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const piList = await RaspberryPi.createQueryBuilder('RaspberryPi')
         .leftJoinAndSelect('RaspberryPi.deviceLights', 'DeviceLight')
@@ -122,7 +122,7 @@ export class DeviceService {
 
   public async updatePiStatus(data: UpdateRaspberryPiStatusRequestDto): Promise<any> {
     try {
-      await RaspberryPi.update({ piId: data.piId }, { status: data.status });
+      await RaspberryPi.update({ piId: data.piId }, { status: data.status, updateTime: new Date() });
       return true;
     } catch (error) {
       this.logger.error(error);
@@ -134,7 +134,7 @@ export class DeviceService {
     try {
       const piData = await RaspberryPi.findOne({ piId: data.piId });
       if (!piData) {
-        throw new HttpException({ error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const dht = new DeviceDht();
       dht.name = data.name;
@@ -156,10 +156,10 @@ export class DeviceService {
     try {
       const haveDHT = await DeviceDht.findOne({ dhtId: data.dhtId });
       if (!haveDHT) {
-        throw new HttpException({ error: MessageError.DHT_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.DHT_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
-      await DeviceDht.update({ dhtId: data.dhtId }, { otp: data.otp });
-      this.websocketGateway.sendOtpRaspberryPi(data.dhtId, data.otp);
+      await DeviceDht.update({ dhtId: data.dhtId }, { otp: data.otp, hwLastUpdate: new Date() });
+      this.websocketGateway.sendOtpDHT(data.dhtId, data.otp);
       return true;
     } catch (error) {
       this.logger.error(error);
@@ -183,7 +183,7 @@ export class DeviceService {
 
   public async updateDHTStatus(data: UpdateDHTStatusRequestDto) {
     try {
-      await DeviceDht.update({ dhtId: data.id }, { status: data.status, isOnline: data.isOnline });
+      await DeviceDht.update({ dhtId: data.id }, { status: data.status, isOnline: data.isOnline, swLastUpdate: new Date() });
       return true;
     } catch (error) {
       this.logger.error(error);
@@ -193,7 +193,7 @@ export class DeviceService {
 
   public async updateDHTValue(data: UpdateDHTValueRequestDto) {
     try {
-      await DeviceDht.update({ dhtId: data.id }, { temperature: data.temperature, moisture: data.moisture });
+      await DeviceDht.update({ dhtId: data.id }, { temperature: data.temperature, moisture: data.moisture, hwLastUpdate: new Date() });
       return true;
     } catch (error) {
       this.logger.error(error);
@@ -205,10 +205,22 @@ export class DeviceService {
     try {
       const piData = await RaspberryPi.findOne({ piId });
       if (!piData) {
-        throw new HttpException({ error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const dhtList = await DeviceDht.find({ piId });
-      return dhtList;
+      return dhtList.map((dhtData) => {
+        return Object.assign(new DHTGetValueResponseDto(), {
+          dhtId: dhtData.dhtId,
+          piId: dhtData.piId,
+          name: dhtData.name,
+          status: dhtData.status,
+          isOnline: dhtData.isOnline,
+          temperature: dhtData.temperature,
+          moisture: dhtData.moisture,
+          positionX: dhtData.positionX,
+          positionY: dhtData.positionY
+        })
+      });
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -219,7 +231,7 @@ export class DeviceService {
     try {
       const user = await User.findOne({ id: userId });
       if (!user) {
-        throw new HttpException({ error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       const piList = await RaspberryPi.createQueryBuilder('RaspberryPi')
         .leftJoinAndSelect('RaspberryPi.deviceDhts', 'DeviceDht')
@@ -239,6 +251,138 @@ export class DeviceService {
               moisture: dhtData.moisture,
               positionX: dhtData.positionX,
               positionY: dhtData.positionY
+            });
+            responseList.push(model);
+          }
+        }
+      }
+      return responseList;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async addLight(data: AddLightRequestDto): Promise<DeviceLight> {
+    try {
+      const piData = await RaspberryPi.findOne({ piId: data.piId });
+      if (!piData) {
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      const light = new DeviceLight();
+      light.name = data.name;
+      light.status = 1;
+      light.isOnline = data.isOnline;
+      light.switchStatus = data.switchStatus;
+      light.swLastUpdate = new Date();
+      light.piId = piData.piId;
+      light.positionX = data.positionX;
+      light.positionY = data.positionY;
+      await light.save();
+      return light;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async installLight(data: InstallLightRequestDto): Promise<Boolean> {
+    try {
+      const haveDHT = await DeviceLight.findOne({ lightId: data.lightId });
+      if (!haveDHT) {
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.LIGHT_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      await DeviceLight.update({ lightId: data.lightId }, { otp: data.otp, hwLastUpdate: new Date() });
+      this.websocketGateway.sendOtpLight(data.lightId, data.otp);
+      return true;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async confirmOtpLight(data: ConfirmOTPLightRequestDto): Promise<any> {
+    try {
+      const lightData = await DeviceLight.findOne({ lightId: data.lightId });
+      if (lightData.otp === data.otp) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async updateLightStatus(data: UpdateLightStatusRequestDto) {
+    try {
+      await DeviceLight.update({ lightId: data.id }, { status: data.status, isOnline: data.isOnline, swLastUpdate: new Date(), hwLastUpdate: new Date() });
+      return true;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async updateLightSwitchStatus(data: UpdateLightValueRequestDto) {
+    try {
+      await DeviceLight.update({ lightId: data.id }, { switchStatus: data.switchStatus, swLastUpdate: new Date(), hwLastUpdate: new Date() });
+      return true;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async getLightByPiId(piId: string) {
+    try {
+      const piData = await RaspberryPi.findOne({ piId });
+      if (!piData) {
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      const lightList = await DeviceLight.find({ piId });
+      return lightList.map((light) => {
+        return Object.assign(new LightGetValueResponseDto(), {
+          lightId: light.lightId,
+          piId: light.piId,
+          name: light.name,
+          status: light.status,
+          switchStatus: light.switchStatus,
+          isOnline: light.isOnline,
+          positionX: light.positionX,
+          positionY: light.positionY
+        })
+      });
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async getLightByUserId(userId: string) {
+    try {
+      const user = await User.findOne({ id: userId });
+      if (!user) {
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      const piList = await RaspberryPi.createQueryBuilder('RaspberryPi')
+        .leftJoinAndSelect('RaspberryPi.deviceLights', 'DeviceLight')
+        .where('RaspberryPi.userId=:userId', { userId })
+        .getMany();
+      const responseList = [];
+      for (const piData of piList) {
+        if (piData.deviceLights) {
+          for (const light of piData.deviceLights) {
+            const model = Object.assign(new LightGetValueResponseDto(), {
+              lightId: light.lightId,
+              piId: light.piId,
+              name: light.name,
+              status: light.status,
+              switchStatus: light.switchStatus,
+              isOnline: light.isOnline,
+              positionX: light.positionX,
+              positionY: light.positionY
             });
             responseList.push(model);
           }

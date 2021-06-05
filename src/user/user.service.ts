@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { MessageError } from '../shared/message/message.error';
 import { User } from '../shared/entities';
-import { CreateUserRequestDto } from './dto/request';
 import { GetAllUserResponseDto } from './dto/response';
 
 @Injectable()
@@ -35,7 +34,7 @@ export class UserService {
         .where('user.id=:id', { id })
         .getOne();
       if (!user) {
-        throw new HttpException({ error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.USER_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       return Object.assign(new GetAllUserResponseDto(), {
         id: user.id,

@@ -7,3 +7,8 @@ export { InstallRaspberryPiRequestDto } from './pi-install.request.dto';
 export { ConfirmOTPRaspberryPiRequestDto } from './pi-confirm-otp.request.dto';
 export { InstallDHTRequestDto } from './dht-install.request.dto';
 export { ConfirmOTPDhtRequestDto } from './dht-confirm-otp.request.dto';
+export { AddLightRequestDto } from './light-add.request.dto';
+export { InstallLightRequestDto } from './light-install.request.dto';
+export { ConfirmOTPLightRequestDto } from './light-confirm-otp.request.dto';
+export { UpdateLightStatusRequestDto } from './light-update-status.request.dto';
+export { UpdateLightValueRequestDto } from './light-update-value.request.dto';

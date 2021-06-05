@@ -38,4 +38,9 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         this.logger.verbose(`Send OTP DHT ID : ${dhtId}`);
         this.server.emit(WebSocketTopic.SEND_OTP_DHT + dhtId, { otp });
     }
+
+    public async sendOtpLight(lightId: string, otp: string) {
+        this.logger.verbose(`Send OTP Light ID : ${lightId}`);
+        this.server.emit(WebSocketTopic.SEND_OTP_LIGHT + lightId, { otp });
+    }
 }

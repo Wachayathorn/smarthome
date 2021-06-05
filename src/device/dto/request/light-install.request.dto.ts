@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class InstallRaspberryPiRequestDto {
+export class InstallLightRequestDto {
     @IsString()
     @IsNotEmpty()
     @ApiProperty({ example: '1' })
-    piId: string;
+    lightId: string;
 
     // @IsString()
     // @IsNotEmpty()
-    // @ApiProperty({ example: 'หน้าบ้าน' })
+    // @ApiProperty({ example: 'Test Light' })
     // name: string;
 
     @IsString()

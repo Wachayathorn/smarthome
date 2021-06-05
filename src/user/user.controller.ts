@@ -1,8 +1,6 @@
-import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
+import { Controller, Get, Logger, Param } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserRequestDto } from './dto/request';
 import { UserService } from './user.service';
-import { User } from '../shared/entities';
 import { GetAllUserResponseDto } from './dto/response';
 
 @ApiTags('Web Application - User')
@@ -10,15 +8,6 @@ import { GetAllUserResponseDto } from './dto/response';
 export class UserController {
   private readonly logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) { }
-
-  // @Post('create')
-  // @ApiOperation({ summary: 'Create user' })
-  // @ApiResponse({ status: 200, description: 'Create user success', type: User })
-  // public async createUser(@Body() data: CreateUserRequestDto): Promise<any> {
-  //   this.logger.verbose('Create user');
-  //   const responseMessage = await this.userService.createUser(data);
-  //   return { responseMessage };
-  // }
 
   @Get('get-all-user')
   @ApiOperation({ summary: 'Get all users list' })
