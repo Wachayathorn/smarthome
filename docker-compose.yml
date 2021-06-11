@@ -2,7 +2,9 @@ version: '3'
 services:
   backend:
     container_name: backend
-    image: wachayathorn/smarthome:latest
+    # image: wachayathorn/smarthome:latest
+    build: .
+    image: smarthome_backend
     restart: always
     ports:
       - 3030:3000
