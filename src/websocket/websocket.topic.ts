@@ -1,6 +1,4 @@
 export class WebSocketTopic {
     private static readonly WS_TOPIC: string = 'WS#';
-    public static readonly SEND_OTP_RASPBERRY_PI = `${WebSocketTopic.WS_TOPIC}OTP#RASPBERRY_PI#`;
-    public static readonly SEND_OTP_DHT = `${WebSocketTopic.WS_TOPIC}OTP#DHT#`;
-    public static readonly SEND_OTP_LIGHT = `${WebSocketTopic.WS_TOPIC}OTP#LIGHT#`;
+    public static readonly SEND_OTP_WITH_USER_ID = `${WebSocketTopic.WS_TOPIC}OTP#USERID#`;
 }

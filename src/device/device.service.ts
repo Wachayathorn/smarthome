@@ -44,7 +44,7 @@ export class DeviceService {
         throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.RASPBERRY_PI_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       await RaspberryPi.update({ piId: data.piId }, { otp: data.otp, updateTime: new Date() });
-      this.websocketGateway.sendOtpRaspberryPi(data.piId, data.otp);
+      this.websocketGateway.sendOtpRaspberryPi(havePi.userId, data.piId, data.otp);
       return true;
     } catch (error) {
       this.logger.error(error);
@@ -165,7 +165,7 @@ export class DeviceService {
         throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.DHT_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       await DeviceDht.update({ dhtId: data.dhtId }, { otp: data.otp, hwLastUpdate: new Date() });
-      this.websocketGateway.sendOtpDHT(data.dhtId, data.otp);
+      this.websocketGateway.sendOtpDHT(haveDHT.pi.userId, data.dhtId, data.otp);
       return true;
     } catch (error) {
       this.logger.error(error);
@@ -299,12 +299,12 @@ export class DeviceService {
 
   public async installLight(data: InstallLightRequestDto): Promise<Boolean> {
     try {
-      const haveDHT = await DeviceLight.findOne({ lightId: data.lightId });
-      if (!haveDHT) {
+      const haveLight = await DeviceLight.findOne({ lightId: data.lightId });
+      if (!haveLight) {
         throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error: MessageError.LIGHT_INVALID }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       await DeviceLight.update({ lightId: data.lightId }, { otp: data.otp, hwLastUpdate: new Date() });
-      this.websocketGateway.sendOtpLight(data.lightId, data.otp);
+      this.websocketGateway.sendOtpLight(haveLight.pi.userId, data.lightId, data.otp);
       return true;
     } catch (error) {
       this.logger.error(error);

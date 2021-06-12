@@ -29,18 +29,18 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         this.logger.debug(`On Disconnected by socket ID: ${client.id}`);
     }
 
-    public async sendOtpRaspberryPi(piId: string, otp: string) {
+    public async sendOtpRaspberryPi(userId: string, piId: string, otp: string) {
         this.logger.verbose(`Send OTP Raspberry Pi ID : ${piId}`);
-        this.server.emit(WebSocketTopic.SEND_OTP_RASPBERRY_PI + piId, { otp });
+        this.server.emit(WebSocketTopic.SEND_OTP_WITH_USER_ID + userId, { device: 'PI', id: piId, otp });
     }
 
-    public async sendOtpDHT(dhtId: string, otp: string) {
+    public async sendOtpDHT(userId: string, dhtId: string, otp: string) {
         this.logger.verbose(`Send OTP DHT ID : ${dhtId}`);
-        this.server.emit(WebSocketTopic.SEND_OTP_DHT + dhtId, { otp });
+        this.server.emit(WebSocketTopic.SEND_OTP_WITH_USER_ID + userId, { device: 'DHT', id: dhtId, otp });
     }
 
-    public async sendOtpLight(lightId: string, otp: string) {
+    public async sendOtpLight(userId: string, lightId: string, otp: string) {
         this.logger.verbose(`Send OTP Light ID : ${lightId}`);
-        this.server.emit(WebSocketTopic.SEND_OTP_LIGHT + lightId, { otp });
+        this.server.emit(WebSocketTopic.SEND_OTP_WITH_USER_ID + userId, { device: 'LIGHT', id: lightId, otp });
     }
 }
