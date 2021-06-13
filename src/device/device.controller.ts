@@ -62,7 +62,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
-  @ApiTags('Web Application & Hardware - Device')
+  @ApiTags('Web Application - Device')
   @Put('/pi/update-status')
   @ApiOperation({ summary: 'Update Raspberry Pi status' })
   @ApiResponse({ status: 200, description: 'Update Raspberry Pi status success', type: Boolean })
@@ -124,7 +124,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
-  @ApiTags('Web Application & Hardware - Device')
+  @ApiTags('Web Application - Device')
   @Put('/dht/update-status')
   @ApiOperation({ summary: 'Update DHT status' })
   @ApiResponse({ status: 200, description: 'Update DHT status success', type: Boolean })
@@ -176,7 +176,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
-  @ApiTags('Web Application & Hardware - Device')
+  @ApiTags('Web Application - Device')
   @Put('/light/update-status')
   @ApiOperation({ summary: 'Update light status' })
   @ApiResponse({ status: 200, description: 'Update light status success', type: Boolean })
@@ -186,7 +186,7 @@ export class DeviceController {
     return { responseMessage };
   }
 
-  @ApiTags('Hardware - Device')
+  @ApiTags('Web Application & Hardware - Device')
   @Put('/light/update-switch-status')
   @ApiOperation({ summary: 'Update light switch' })
   @ApiResponse({ status: 200, description: 'Update light switch success', type: Boolean })
