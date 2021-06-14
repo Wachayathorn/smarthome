@@ -17,11 +17,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  fs.writeFile('swagger.json', JSON.stringify(document), (err) => {
-    // if (err) {
-    //   return logger.error(err);
-    // }
-  });
+  fs.writeFile('swagger.json', JSON.stringify(document), (err) => { });
   SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.HPPT_PORT, () => {
